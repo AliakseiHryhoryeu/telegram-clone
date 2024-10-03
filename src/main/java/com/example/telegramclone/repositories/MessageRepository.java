@@ -11,4 +11,6 @@ public interface MessageRepository extends MongoRepository<Message, String> {
     List<Message> findByToUserId(String toUserId);
 
     List<Message> findByFromUserId(String fromUserId);
+
+    List<Message> findMessagesByFromUserIdAndToUserId(String fromUserId, String toUserId);
 }
