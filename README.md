@@ -25,7 +25,7 @@ Telegram Clone - just a simple messenger
 
 ## Figma
 
-<https://www.figma.com/design/g7S6OMRMotuRsAaj1Z6CRC/Hamster-messenger?m=auto&t=Nn7ox7xSRI0uSlmJ-1>
+<https://www.figma.com/design/g7S6OMRMotuRsAaj1Z6CRC/Hamster-messenger>
 
 ## Web
 
