@@ -17,15 +17,14 @@ import java.util.UUID;
 // https://github.com/viralpatel/java-create-validate-jwt-token/blob/master/src/main/java/net/viralpatel/jwt/JWTGenerateValidateHMAC.java
 
 public class JwtUtil {
+	// will change later
 	static String secret = "asdfSFS34wfsdfsdfSDSD32dfsddDDerQSNCK34SOWEK5354fdgdf4";
 
 	public static void main(String[] args) {
 
-		String jwt = createJwtSignedHMAC();
-
-		Jws<Claims> token = parseJwt(jwt);
-
-		System.out.println(token.getPayload());
+		// String jwt = createJwtSignedHMAC();
+		// Jws<Claims> token = parseJwt(jwt);
+		// System.out.println(token.getPayload());
 	}
 
 	public static Jws<Claims> parseJwt(String jwtString) {
@@ -40,18 +39,19 @@ public class JwtUtil {
 		return jwt;
 	}
 
-	public static String createJwtSignedHMAC() {
+	public static String createJwtSignedHMAC(String id, String username, String email) {
 
 		Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret), SignatureAlgorithm.HS256.getJcaName());
 
 		Instant now = Instant.now();
 		String jwtToken = Jwts.builder()
-				.claim("name", "Jane Doe")
-				.claim("email", "jane@example.com")
-				.subject("jane")
+				.claim("id", id)
+				.claim("username", username)
+				.claim("email", email)
+				.subject(username)
 				.id(UUID.randomUUID().toString())
 				.issuedAt(Date.from(now))
-				.expiration(Date.from(now.plus(5l, ChronoUnit.MINUTES)))
+				.expiration(Date.from(now.plus(7200, ChronoUnit.MINUTES)))
 				.signWith(hmacKey)
 				.compact();
 
