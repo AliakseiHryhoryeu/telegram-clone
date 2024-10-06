@@ -1,0 +1,244 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainlayer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_login">
+
+
+    <!--  Label-->
+    <TextView
+        android:id="@+id/label1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="Hamster Messenger"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--    google auth button-->
+    <LinearLayout
+        android:id="@+id/google_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/google_login_rounded_btn"
+        android:orientation="horizontal"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="13dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label1">
+
+        <ImageView
+            android:id="@+id/google_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_google" />
+
+        <TextView
+            android:id="@+id/google_btn_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:text="Sign up with google"
+            android:textColor="@android:color/white"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <!--    or divider section-->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:layout_marginBottom="25dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/google_btn"
+        tools:layout_editor_absoluteX="16dp">
+
+        <View
+            android:id="@+id/orlabelleft"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@android:color/white" />
+
+        <TextView
+            android:id="@+id/label_or"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:text="OR"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/white"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/orlabelright"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            tools:layout_editor_absoluteX="223dp"
+            tools:layout_editor_absoluteY="36dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/labelsignuplogin"
+        android:layout_width="320dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Sign up with your email address"
+        android:textColor="@color/white"
+        android:textStyle="normal"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <LinearLayout
+        android:id="@+id/usernamelayoutinput"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelsignuplogin">
+
+        <TextView
+            android:id="@+id/username_input_label"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:text="What should we call you?"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="7dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <EditText
+            android:id="@+id/username_input"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/white"
+            android:hint="Enter a profile name"
+            android:padding="14dp"
+            android:background="@drawable/login_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/username_input_label" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/passwordlayoutinput"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernamelayoutinput">
+
+        <TextView
+            android:id="@+id/password_input_label"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:text="Create a password"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="7dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <EditText
+            android:id="@+id/password_input"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/white"
+            android:hint="Create a password"
+            android:padding="14dp"
+            android:background="@drawable/login_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_input_label" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#DEA446"
+        android:paddingHorizontal="50dp"
+        android:paddingVertical="12dp"
+        android:text="Sign up"
+        android:textFontWeight="700"
+        android:textSize="18dp"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordlayoutinput" />
+
+    <LinearLayout
+        android:id="@+id/tologin_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/submit_button">
+
+        <TextView
+            android:id="@+id/tologin_label1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Have an account?"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:textColor="@color/white"
+            android:textStyle="normal"
+            />
+        <TextView
+            android:id="@+id/tologin_label2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log in"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:textColor="#FB9F0D"
+            android:textStyle="normal"
+            android:layout_marginLeft="4dp"
+            />
+    </LinearLayout>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
