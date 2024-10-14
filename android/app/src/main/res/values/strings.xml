@@ -36,4 +36,10 @@
     <string name="resetpassword_remember_password_btn_text1">Remember your password?</string>
     <string name="resetpassword_remember_password_btn_text2">Log in</string>
     <string name="resetpassword_submit_btn">Send</string>
+
+<!--    404 Page    -->
+    <string name="page404_label">404</string>
+    <string name="page404_description1">Oops!</string>
+    <string name="page404_description2">The page not found</string>
+    <string name="page404_btn">Go home</string>
 </resources>

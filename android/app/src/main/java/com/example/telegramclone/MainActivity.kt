@@ -9,8 +9,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 //        setContentView(R.layout.activity_main)
-          setContentView(R.layout.signup)
+//        setContentView(R.layout.signup)
 //        setContentView(R.layout.login)
+ //       setContentView(R.layout.resetpassword)
+        setContentView(R.layout.page404)
 
 //        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
 //            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
