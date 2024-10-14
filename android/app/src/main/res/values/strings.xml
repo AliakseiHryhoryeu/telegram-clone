@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">telegramClone</string>
-    <string name="auth_messenger_label">Hamster Messenger</string>
 
+<!--    Components      -->
+    <string name="auth_messenger_label">Hamster Messenger</string>
     <string name="google_btn_text">Continue with google </string>
     <string name="or_divider_text">OR </string>
 
