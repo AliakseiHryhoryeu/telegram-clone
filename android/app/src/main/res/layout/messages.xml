@@ -1,0 +1,166 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainlayer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#212D3A">
+
+
+    <!--    Label - Messenger name      -->
+    <include
+        android:id="@+id/messenger_label"
+        layout="@layout/label_messenger_name" />
+
+
+    <LinearLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1D2732"
+        android:gravity="start"
+        android:orientation="horizontal"
+        android:paddingTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/contact_back_btn"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/ic_back" />
+        <ImageView
+            android:id="@+id/header_contact_preview_img"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/rounded_max"
+            android:contentDescription="Imaga"
+
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_hamster"
+
+            />
+
+        <LinearLayout
+            android:id="@+id/header_contact_layour"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/header_contact_username"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:layout_marginStart="12dp"
+                android:text="Example username"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/header_contact_lastseen"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:text="Last seen <last seen>"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+        <View
+            android:id="@+id/contact_back_btn1"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/ic_back" />
+    </LinearLayout>
+
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/header_contact_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#212D3A"
+        android:gravity="start"
+        android:orientation="vertical"
+        android:paddingTop="14dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/header_layout"
+        tools:layout_editor_absoluteX="0dp">
+
+
+        <TextView
+            android:id="@+id/contact_info_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Info"
+            android:textColor="#80D4FF"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/contact_info_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/temp1"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:text="+12 222 333 444"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/temp2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mobile"
+                android:textColor="#A4A4A4"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/contact_info_name"
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="14dp"
+            android:text="name"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/contact_info_username"
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="14dp"
+            android:text="username"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
