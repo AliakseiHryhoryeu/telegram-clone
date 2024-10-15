@@ -11,9 +11,8 @@ Telegram Clone - just a simple messenger
 
 ## Mobile (only android)
 
-- Kotlin
+- Java/Kotlin
 - Android Studio
-- Appium
 - ?????
 
 ## Web Application - maybe a liiiitle later
