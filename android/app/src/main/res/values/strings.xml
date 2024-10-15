@@ -5,9 +5,17 @@
     <string name="auth_messenger_label">Hamster Messenger</string>
     <string name="google_btn_text">Continue with google </string>
     <string name="or_divider_text">OR </string>
+<!--    Image default name      -->
+    <string name="contact_img" >Contact Image</string>
 
-    
-<!--    Login     -->
+<!--    Contact     -->
+    <string name="contact_info_text">Info</string>
+
+<!--    Messages    -->
+    <string name="messages_input_default">Your message.</string>
+    <string name="messages_input_placeholder">Your message...</string>
+
+<!--    Login       -->
     <string name="login_label_text">To continue, log in to messenger</string>
     <string name="login_email_or_username_text" >What\'s your email or username?</string>
     <string name="login_email_or_username_placeholder_text" >Email address or username</string>

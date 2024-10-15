@@ -4,7 +4,7 @@
     android:id="@+id/mainlayer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#212D3A">
+    android:background="#0E1621">
 
 
     <!--    Label - Messenger name      -->
@@ -20,6 +20,7 @@
         android:background="#1D2732"
         android:gravity="start"
         android:orientation="horizontal"
+        android:paddingBottom="10dp"
         android:paddingTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,127 +33,187 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/ic_back" />
-        <ImageView
-            android:id="@+id/header_contact_preview_img"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/rounded_max"
-            android:contentDescription="Imaga"
-
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_hamster"
-
-            />
 
         <LinearLayout
-            android:id="@+id/header_contact_layour"
+            android:id="@+id/Contact_info_btn"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
 
-            <TextView
-                android:id="@+id/header_contact_username"
-                android:layout_width="match_parent"
-                android:layout_height="22dp"
-                android:layout_marginStart="12dp"
-                android:text="Example username"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+            >
 
-            <TextView
-                android:id="@+id/header_contact_lastseen"
-                android:layout_width="match_parent"
-                android:layout_height="22dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
-                android:text="Last seen <last seen>"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+            <ImageView
+                android:id="@+id/header_contact_preview_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+
+                android:background="@drawable/rounded_max"
+                android:contentDescription="Image"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_hamster" />
+
+            <LinearLayout
+                android:id="@+id/header_contact_layour"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/header_contact_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="12dp"
+                    android:text="Example username"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/header_contact_lastseen"
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="40dp"
+                    android:text="Last seen <last seen>"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
         </LinearLayout>
+
         <View
             android:id="@+id/contact_back_btn1"
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginTop="4dp"
-            android:background="@drawable/ic_back" />
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/ic_3dots" />
     </LinearLayout>
-
-
-
-
-
 
     <LinearLayout
         android:id="@+id/header_contact_info"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#212D3A"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/message_rounded"
         android:gravity="start"
+        android:minWidth="320dp"
         android:orientation="vertical"
-        android:paddingTop="14dp"
-        android:paddingBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/header_layout"
-        tools:layout_editor_absoluteX="0dp">
-
-
-        <TextView
-            android:id="@+id/contact_info_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="Info"
-            android:textColor="#80D4FF"
-            android:textSize="14sp" />
-
-        <LinearLayout
-            android:id="@+id/contact_info_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="4dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/temp1"
-                android:layout_width="match_parent"
-                android:layout_height="22dp"
-                android:text="+12 222 333 444"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/temp2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Mobile"
-                android:textColor="#A4A4A4"
-                android:textSize="12sp" />
-        </LinearLayout>
-
+        android:paddingStart="6dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="6dp"
+        android:paddingBottom="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/login_email_or_username_text"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/contact_info_name"
-            android:layout_width="match_parent"
-            android:layout_height="22dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="14dp"
-            android:text="name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:maxWidth="320dp"
+            android:text="message message message
+             message message message message message message message message
+              message message message message message message message message
+              message message message message message message message message
+               message message message "
             android:textColor="@color/white"
             android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/contact_info_username"
+        <LinearLayout
+            android:id="@+id/message_data_layer"
             android:layout_width="match_parent"
-            android:layout_height="22dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="14dp"
-            android:text="username"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/message_icon_1"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/ic_double_check_gray" />
+
+            <TextView
+                android:id="@+id/contact_info_username"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="8 October 2022 12:40"
+                android:textColor="#CACACA"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
+
+    <TextView
+        android:id="@+id/login_email_or_username_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#212D3A"
+
+        android:minHeight="22dp"
+        android:text="@string/messages_input_default"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/messages_input_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/messages_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#212D3A"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/messages_input_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/login_email_or_username_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="emailAddress"
+                android:background="@drawable/login_input"
+                android:backgroundTint="@android:color/white"
+                android:hint="@string/messages_input_placeholder"
+                android:inputType="textEmailAddress|textPersonName"
+                android:padding="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="8dp"
+            android:paddingEnd="12dp">
+
+            <View
+                android:id="@+id/messages_input_send_btn"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_send" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 
     <androidx.constraintlayout.widget.Guideline
