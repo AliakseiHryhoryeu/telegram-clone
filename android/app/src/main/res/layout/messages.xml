@@ -20,8 +20,8 @@
         android:background="#1D2732"
         android:gravity="start"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
         android:paddingTop="40dp"
+        android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
