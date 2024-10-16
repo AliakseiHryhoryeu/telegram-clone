@@ -1,16 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainlayer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#212D3A">
-
-
-    <!--    Label - Messenger name      -->
-    <include
-        android:id="@+id/messenger_label"
-        layout="@layout/label_messenger_name" />
+    android:background="#212D3A"
+    tools:context=".ui.contact.ContactFragment">
 
 
     <LinearLayout
@@ -81,7 +77,7 @@
                 android:layout_height="22dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
-                android:text="Last seen <last seen>"
+                android:text="Last seen last seen"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </LinearLayout>

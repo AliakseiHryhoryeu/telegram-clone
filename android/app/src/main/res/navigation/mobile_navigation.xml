@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.telegramclone.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_nav_home_to_placeholder"
+            app:destination="@id/nav_messages" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_login"
+        android:name="com.example.telegramclone.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_loginFragment_to_ResetpasswordFragment"
+            app:destination="@id/ResetpasswordFragment" />
+        <action
+            android:id="@+id/action_nav_login_to_nav_signup"
+            app:destination="@id/nav_signup" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_signup"
+        android:name="com.example.telegramclone.ui.signup.SignupFragment"
+        android:label="SignupFragment"
+        tools:layout="@layout/fragment_signup">
+
+        <action
+            android:id="@+id/action_nav_signup_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_signup_to_nav_login"
+            app:destination="@id/nav_login" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ResetpasswordFragment"
+        android:name="com.example.telegramclone.ui.resetpassword.ResetpasswordFragment"
+        android:label="Resetpassword"
+        tools:layout="@layout/fragment_resetpassword">
+        <action
+            android:id="@+id/action_ResetpasswordFragment_to_loginFragment"
+            app:destination="@id/nav_login" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_messages"
+        android:name="com.example.telegramclone.ui.messages.MessagesFragment"
+        android:label="MessagesFragment"
+        tools:layout="@layout/fragment_messages">
+
+        <action
+            android:id="@+id/action_messages_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_messages_to_contact"
+            app:destination="@id/contact" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/contact"
+        android:name="com.example.telegramclone.ui.contact.ContactFragment"
+        android:label="ContactFragment"
+        tools:layout="@layout/fragment_contact">
+        <action
+            android:id="@+id/action_contact_to_messages"
+            app:destination="@id/nav_messages" />
+    </fragment>
+</navigation>

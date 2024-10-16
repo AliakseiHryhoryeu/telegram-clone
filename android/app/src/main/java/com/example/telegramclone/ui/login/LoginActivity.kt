@@ -29,7 +29,6 @@ class LoginActivity : AppCompatActivity() {
         binding = CustomLoginBinding(this)
 
         //  binding = ActivityLoginBinding.inflate(layoutInflater)
-
         //    setContentView(binding.root)
 
         val usernameOrEmail = binding.usernameOrEmailInput
