@@ -9,7 +9,7 @@
         android:id="@+id/google_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/google_login_rounded_btn"
+        android:background="@drawable/btn_google_rounded"
         android:orientation="horizontal"
         android:paddingHorizontal="35dp"
         android:paddingVertical="13dp">

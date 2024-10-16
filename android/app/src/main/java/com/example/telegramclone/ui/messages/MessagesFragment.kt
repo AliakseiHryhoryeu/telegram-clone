@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.example.telegramclone.R
 import com.example.telegramclone.databinding.FragmentMessagesBinding
 import com.example.telegramclone.ui.messages.MessagesViewModel
 
-class MessagesFragment :Fragment() {
+class MessagesFragment : Fragment() {
     private var _binding: FragmentMessagesBinding? = null
 
     // This property is only valid between onCreateView and
@@ -28,10 +30,13 @@ class MessagesFragment :Fragment() {
         _binding = FragmentMessagesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        val textView: TextView = binding.textSlideshow
-//        messagesViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
+        //   Buttons
+        binding.ContactInfoBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_messages_to_contact)
+        }
+        binding.ContactBackBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_messages_to_nav_home)
+        }
         return root
     }
 

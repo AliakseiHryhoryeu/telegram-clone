@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_repeat_background"
+    android:background="@drawable/background_home_repeated"
     tools:context=".ui.home.HomeFragment">
 
     <!--    Label - Messenger name      -->
@@ -42,7 +42,7 @@
                 android:id="@+id/login_email_or_username_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/login_input"
+                android:background="@drawable/input_auth"
                 android:gravity="start"
                 android:hint="@string/search_input_placeholder"
                 android:inputType="text"
@@ -68,7 +68,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/Contact_info_btn11"
+        android:id="@+id/Contact_info_btn_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -85,7 +85,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
 
-            android:background="@drawable/rounded_max"
+            android:background="@drawable/message_usericon_rounded"
             android:contentDescription="Image"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_hamster" />

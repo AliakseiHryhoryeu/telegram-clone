@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.example.telegramclone.R
 import com.example.telegramclone.databinding.FragmentContactBinding
 
-class ContactFragment :Fragment() {
+class ContactFragment : Fragment() {
     private var _binding: FragmentContactBinding? = null
 
     // This property is only valid between onCreateView and
@@ -26,10 +28,11 @@ class ContactFragment :Fragment() {
         _binding = FragmentContactBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        val textView: TextView = binding.textSlideshow
-//        messagesViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
+        //
+        binding.ContactBackBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_contact_to_messages)
+        }
+
         return root
     }
 

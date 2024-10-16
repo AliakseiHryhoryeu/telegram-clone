@@ -11,7 +11,7 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_nav_home_to_placeholder"
+            android:id="@+id/action_nav_home_to_messages"
             app:destination="@id/nav_messages" />
     </fragment>
 

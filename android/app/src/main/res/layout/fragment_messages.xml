@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <View
-            android:id="@+id/contact_back_btn"
+            android:id="@+id/Contact_back_btn"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginStart="10dp"
@@ -45,7 +45,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
 
-                android:background="@drawable/rounded_max"
+                android:background="@drawable/message_usericon_rounded"
                 android:contentDescription="Image"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_hamster" />
@@ -186,7 +186,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="emailAddress"
-                android:background="@drawable/login_input"
+                android:background="@drawable/input_auth"
                 android:backgroundTint="@android:color/white"
                 android:hint="@string/messages_input_placeholder"
                 android:inputType="textEmailAddress|textPersonName"
