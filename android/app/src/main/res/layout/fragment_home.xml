@@ -8,10 +8,6 @@
     tools:context=".ui.home.HomeFragment">
 
     <!--    Label - Messenger name      -->
-    <include
-        android:id="@+id/messenger_label"
-        layout="@layout/label_messenger_name" />
-
 
     <LinearLayout
         android:id="@+id/header_layout"
@@ -20,7 +16,7 @@
         android:background="#1D2732"
         android:gravity="start"
         android:orientation="horizontal"
-        android:paddingTop="40dp"
+        android:paddingTop="50dp"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,20 +36,19 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-
             >
 
             <EditText
                 android:id="@+id/login_email_or_username_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="emailAddress"
                 android:background="@drawable/login_input"
-                android:backgroundTint="@android:color/white"
-                android:gravity="center"
-                android:hint="@string/messages_input_placeholder"
-                android:inputType="textEmailAddress|textPersonName"
+                android:gravity="start"
+                android:hint="@string/search_input_placeholder"
+                android:inputType="text"
                 android:padding="10dp"
+                android:textColor="@color/white"
+                android:textColorHint="#C0C0C0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />

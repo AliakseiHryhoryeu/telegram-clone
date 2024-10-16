@@ -8,6 +8,9 @@
     <!--    Image default name      -->
     <string name="contact_img">Contact Image</string>
 
+    <!--    Home        -->
+    <string name="search_input_placeholder">Search</string>
+
     <!--    Contact     -->
     <string name="contact_info_text">Info</string>
 

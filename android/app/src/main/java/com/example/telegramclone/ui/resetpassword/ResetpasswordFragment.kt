@@ -21,7 +21,7 @@ class ResetpasswordFragment :Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val messagesViewModel =
-            ViewModelProvider(this).get(SignupViewModel::class.java)
+            ViewModelProvider(this).get(ResetpasswordViewModel::class.java)
 
         _binding = FragmentResetpasswordBinding.inflate(inflater, container, false)
         val root: View = binding.root
