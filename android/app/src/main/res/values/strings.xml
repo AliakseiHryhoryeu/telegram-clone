@@ -1,24 +1,24 @@
 <resources>
     <string name="app_name">telegramClone</string>
 
-<!--    Components      -->
+    <!--    Components      -->
     <string name="auth_messenger_label">Hamster Messenger</string>
     <string name="google_btn_text">Continue with google </string>
     <string name="or_divider_text">OR </string>
-<!--    Image default name      -->
-    <string name="contact_img" >Contact Image</string>
+    <!--    Image default name      -->
+    <string name="contact_img">Contact Image</string>
 
-<!--    Contact     -->
+    <!--    Contact     -->
     <string name="contact_info_text">Info</string>
 
-<!--    Messages    -->
+    <!--    Messages    -->
     <string name="messages_input_default">Your message.</string>
     <string name="messages_input_placeholder">Your message...</string>
 
-<!--    Login       -->
+    <!--    Login       -->
     <string name="login_label_text">To continue, log in to messenger</string>
-    <string name="login_email_or_username_text" >What\'s your email or username?</string>
-    <string name="login_email_or_username_placeholder_text" >Email address or username</string>
+    <string name="login_email_or_username_text">What\'s your email or username?</string>
+    <string name="login_email_or_username_placeholder_text">Email address or username</string>
     <string name="login_password_text">What\'s your password?</string>
     <string name="login_password_placeholder_text">Enter your password</string>
     <string name="login_forgot_password_btn_text">Forgot your password?</string>
@@ -26,17 +26,17 @@
     <string name="login_to_signup_label_text">Don\'t have an account?</string>
     <string name="login_to_signup_btn">Sign Up</string>
 
-<!--    Sign up     -->
+    <!--    Sign up     -->
     <string name="signup_label_text">Sign up with your email address</string>
-    <string name="signup_email_label_text" >What\'s your email?</string>
-    <string name="signup_email_placeholder_text" >Enter your email</string>
+    <string name="signup_email_label_text">What\'s your email?</string>
+    <string name="signup_email_placeholder_text">Enter your email</string>
     <string name="signup_username_label_text">What should we call you?</string>
     <string name="signup_username_placeholder_text">Enter a profile name</string>
     <string name="signup_password_label_text">Create a password</string>
     <string name="signup_password_placeholder_text">Create a password</string>
     <string name="signup_signup_btn_text">Sign up</string>
 
-<!--    Reset password    -->
+    <!--    Reset password    -->
     <string name="resetpassword_label">Password Reset</string>
     <string name="resetpassword_description_1">Enter your <b>username</b>, or <b>email</b> address that you used to register.</string>
     <string name="resetpassword_description_2">We\'ll send you an email with your username and a link to reset your password.</string>
@@ -46,9 +46,18 @@
     <string name="resetpassword_remember_password_btn_text2">Log in</string>
     <string name="resetpassword_submit_btn">Send</string>
 
-<!--    404 Page    -->
+    <!--    404 Page    -->
     <string name="page404_label">404</string>
     <string name="page404_description1">Oops!</string>
     <string name="page404_description2">The page not found</string>
     <string name="page404_btn">Go home</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
 </resources>
