@@ -35,4 +35,4 @@ https://...........
 <https://play.google.com/store/apps/.........>
 
 i will change img later
-![Telegram-clone](./.preview/preview-1.jpg)
+![Telegram-clone](./.preview/preview-1.png)
