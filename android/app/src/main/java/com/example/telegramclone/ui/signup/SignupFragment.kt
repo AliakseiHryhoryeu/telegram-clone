@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.example.telegramclone.R
 import com.example.telegramclone.databinding.FragmentSignupBinding
 
-class SignupFragment :Fragment() {
+class SignupFragment : Fragment() {
     private var _binding: FragmentSignupBinding? = null
 
     // This property is only valid between onCreateView and
@@ -26,10 +28,19 @@ class SignupFragment :Fragment() {
         _binding = FragmentSignupBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        val textView: TextView = binding.textSlideshow
-//        messagesViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
+        binding.messengerLabel.setOnClickListener {
+            findNavController().navigate(R.id.action_signup_to_login)
+        }
+        binding.signupToLoginBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_signup_to_login)
+        }
+
+        binding.googleBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_signup_to_home)
+        }
+        binding.submitButton.setOnClickListener {
+            findNavController().navigate(R.id.action_signup_to_home)
+        }
         return root
     }
 

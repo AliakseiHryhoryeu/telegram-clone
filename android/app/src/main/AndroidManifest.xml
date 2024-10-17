@@ -18,7 +18,7 @@
             android:label="@string/title_activity_navigation_drawler"
             android:theme="@style/Theme.TelegramClone.NoActionBar" />
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.login2222.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
         <activity

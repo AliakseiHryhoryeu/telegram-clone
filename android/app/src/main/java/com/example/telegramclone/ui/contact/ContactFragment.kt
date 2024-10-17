@@ -28,7 +28,6 @@ class ContactFragment : Fragment() {
         _binding = FragmentContactBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        //
         binding.ContactBackBtn.setOnClickListener {
             findNavController().navigate(R.id.action_contact_to_messages)
         }

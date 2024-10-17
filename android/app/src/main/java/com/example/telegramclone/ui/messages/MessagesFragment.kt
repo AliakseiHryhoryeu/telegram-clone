@@ -34,6 +34,9 @@ class MessagesFragment : Fragment() {
         binding.ContactInfoBtn.setOnClickListener {
             findNavController().navigate(R.id.action_messages_to_contact)
         }
+        binding.contactDrawMenuBtn1.setOnClickListener {
+            findNavController().navigate(R.id.action_messages_to_contact)
+        }
         binding.ContactBackBtn.setOnClickListener {
             findNavController().navigate(R.id.action_messages_to_nav_home)
         }

@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.example.telegramclone.R
 import com.example.telegramclone.databinding.FragmentResetpasswordBinding
 
 class ResetpasswordFragment :Fragment() {
@@ -26,10 +28,13 @@ class ResetpasswordFragment :Fragment() {
         _binding = FragmentResetpasswordBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        val textView: TextView = binding.textSlideshow
-//        messagesViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
+        binding.messengerLabel.setOnClickListener {
+            findNavController().navigate(R.id.action_resetpassword_to_login)
+        }
+        binding.resetpasswordToLoginBtn.setOnClickListener{
+            findNavController().navigate(R.id.action_resetpassword_to_login)
+        }
+
         return root
     }
 
