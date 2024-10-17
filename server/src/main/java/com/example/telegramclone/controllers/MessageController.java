@@ -8,7 +8,7 @@ import com.example.telegramclone.repositories.MessageRepository;
 
 import com.example.telegramclone.DTO.Message.MessageCreateDTO;
 import com.example.telegramclone.DTO.Message.MessageDeleteDTO;
-import com.example.telegramclone.DTO.Message.MessageGetsByContactId;
+import com.example.telegramclone.DTO.Message.MessageGetsByContactIdDTO;
 import com.example.telegramclone.DTO.Message.MessageReadDTO;
 import com.example.telegramclone.DTO.Message.MessageUpdateDTO;
 
@@ -49,7 +49,7 @@ public class MessageController {
 
         // Создаем новый объект сообщения
         Message message = new Message();
-        message.setMessage(messageCreateDTO.getMessage());
+        message.setMessageContent(messageCreateDTO.getMessage()); // Установка сообщения
         message.setFromUserId(messageCreateDTO.getFromUserId());
         message.setToUserId(messageCreateDTO.getToUserId());
         message.setDate(new Date().toString()); // Установка текущей даты
@@ -59,10 +59,8 @@ public class MessageController {
         // Сохраняем сообщение в базе данных
         messageRepository.save(message);
 
-        // Обновляем контакты для пользователя fromUser и toUser аналогично прошлому
-        // примеру
+        // Обновляем контакты для пользователя fromUser и toUser
 
-        // Сохраняем обновленных пользователей
         userRepository.save(fromUser);
         userRepository.save(toUser);
 
@@ -90,7 +88,7 @@ public class MessageController {
         }
 
         // Обновляем текст сообщения
-        message.setMessage(messageUpdateDTO.getNewMessage());
+        message.setMessageContent(messageUpdateDTO.getNewMessage()); // Исправлено на setMessageContent
 
         // Сохраняем обновленное сообщение
         messageRepository.save(message);
@@ -141,7 +139,7 @@ public class MessageController {
 
     // 4. Получение сообщений по ID контакта (собеседника)
     @PostMapping("/getMessagesByContactId")
-    public ResponseEntity<?> getMessagesByContactId(@RequestBody @Valid MessageGetsByContactId request) {
+    public ResponseEntity<?> getMessagesByContactId(@RequestBody @Valid MessageGetsByContactIdDTO request) {
         // Проверка, существует ли пользователь
         Optional<User> fromUserOpt = userRepository.findById(request.getFromUserId());
         if (fromUserOpt.isEmpty()) {

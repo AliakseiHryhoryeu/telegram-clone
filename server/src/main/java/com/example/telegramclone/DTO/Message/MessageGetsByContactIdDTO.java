@@ -2,38 +2,38 @@ package com.example.telegramclone.DTO.Message;
 
 import javax.validation.constraints.NotBlank;
 
-public class MessageDeleteDTO {
-
-	@NotBlank(message = "messageId is required")
-	private String messageId;
+public class MessageGetsByContactIdDTO {
 
 	@NotBlank(message = "from UserId is required")
 	private String fromUserId;
 
+	@NotBlank(message = "contactId is required")
+	private String contactId;
+
 	// Конструктор без аргументов
-	public MessageDeleteDTO() {
+	public MessageGetsByContactIdDTO() {
 	}
 
 	// Конструктор со всеми аргументами
-	public MessageDeleteDTO(String messageId, String fromUserId) {
-		this.messageId = messageId;
+	public MessageGetsByContactIdDTO(String fromUserId, String contactId) {
 		this.fromUserId = fromUserId;
+		this.contactId = contactId;
 	}
 
 	// Геттеры и сеттеры
-	public String getMessageId() {
-		return messageId;
-	}
-
-	public void setMessageId(String messageId) {
-		this.messageId = messageId;
-	}
-
 	public String getFromUserId() {
 		return fromUserId;
 	}
 
 	public void setFromUserId(String fromUserId) {
 		this.fromUserId = fromUserId;
+	}
+
+	public String getContactId() {
+		return contactId;
+	}
+
+	public void setContactId(String contactId) {
+		this.contactId = contactId;
 	}
 }

@@ -1,11 +1,8 @@
 package com.example.telegramclone.DTO.Message;
 
-import lombok.Data;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Data
 public class MessageCreateDTO {
 
 	@NotBlank(message = "message is required")
@@ -17,4 +14,40 @@ public class MessageCreateDTO {
 
 	@NotBlank(message = "to UserId is required")
 	private String toUserId;
+
+	// Конструктор без аргументов
+	public MessageCreateDTO() {
+	}
+
+	// Конструктор со всеми аргументами
+	public MessageCreateDTO(String message, String fromUserId, String toUserId) {
+		this.message = message;
+		this.fromUserId = fromUserId;
+		this.toUserId = toUserId;
+	}
+
+	// Геттеры и сеттеры
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getFromUserId() {
+		return fromUserId;
+	}
+
+	public void setFromUserId(String fromUserId) {
+		this.fromUserId = fromUserId;
+	}
+
+	public String getToUserId() {
+		return toUserId;
+	}
+
+	public void setToUserId(String toUserId) {
+		this.toUserId = toUserId;
+	}
 }
