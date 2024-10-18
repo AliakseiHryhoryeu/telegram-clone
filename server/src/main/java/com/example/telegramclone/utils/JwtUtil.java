@@ -48,7 +48,6 @@ public class JwtUtil {
 				.claim("id", id)
 				.claim("username", username)
 				.claim("email", email)
-				.subject(username)
 				.id(UUID.randomUUID().toString())
 				.issuedAt(Date.from(now))
 				.expiration(Date.from(now.plus(7200, ChronoUnit.MINUTES)))

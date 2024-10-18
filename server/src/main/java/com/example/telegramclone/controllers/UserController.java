@@ -1,6 +1,6 @@
 package com.example.telegramclone.controllers;
 
-import com.example.telegramclone.DTO.User.UserCreateDTO;
+import com.example.telegramclone.DTO.User.UserCreateRequest;
 import com.example.telegramclone.models.User;
 import com.example.telegramclone.repositories.UserRepository;
 import com.example.telegramclone.utils.PasswordUtil;
@@ -11,36 +11,50 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import javax.validation.Valid;
+import org.springframework.http.HttpHeaders;
+
+import jakarta.validation.Valid;
+
+import com.example.telegramclone.utils.JwtUtil;
 
 import com.example.telegramclone.DTO.User.UserChangeDescriptionDTO;
 import com.example.telegramclone.DTO.User.UserChangePasswordDTO;
 import com.example.telegramclone.DTO.User.UserChangeUsernameDTO;
+import com.example.telegramclone.DTO.User.UserCreateResponse;
+import com.example.telegramclone.DTO.User.UserParseJwtResponse;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createUser(@RequestBody UserCreateDTO req) {
+    @PostMapping("/createUser")
+    public ResponseEntity<?> createUser(@RequestBody @Valid UserCreateRequest req) {
         // Requirements fields
-        if (req.getFirstname() == null || req.getFirstname().isEmpty()) {
-            return ResponseEntity.badRequest().body("Name must not be null or empty");
-        }
+        //
+        // Username validation
         if (req.getUsername() == null || req.getUsername().isEmpty()) {
             return ResponseEntity.badRequest().body("Username must not be null or empty");
         }
+        if (req.getUsername().length() < 3 || req.getUsername().length() > 35) {
+            return ResponseEntity.badRequest().body("Username must be between 3 and 35 characters long");
+        }
+
+        // Email validation
         if (!req.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             return ResponseEntity.badRequest().body("Invalid email format");
         }
         if (req.getEmail() == null || req.getEmail().isEmpty()) {
             return ResponseEntity.badRequest().body("Email must not be null or empty");
         }
+
         // Password validation
         if (req.getPassword() == null || req.getPassword().isEmpty()) {
             return ResponseEntity.badRequest().body("Password must not be null or empty");
@@ -48,24 +62,59 @@ public class UserController {
         if (req.getPassword().length() < 8) {
             return ResponseEntity.badRequest().body("Password must be at least 8 characters long");
         }
-        if (req.getPassword().length() > 30) {
-            return ResponseEntity.badRequest().body("Password max lenght 30 characters long");
+        if (req.getPassword().length() > 40) {
+            return ResponseEntity.badRequest().body("Password max lenght 40 characters long");
         }
+
+        // username is uniq?
+        Optional<User> existingUsername = userRepository.findByUsername(req.getUsername());
+        if (existingUsername.isPresent()) {
+            return ResponseEntity.badRequest().body("Username already taken");
+        }
+
+        // Email is uniq?
+        Optional<User> existingUserEmail = userRepository.findByEmail(req.getEmail());
+        if (existingUserEmail.isPresent()) {
+            return ResponseEntity.badRequest().body("email already taken");
+        }
+
         // Hashing password
         String hashedPassword = PasswordUtil.hashPassword(req.getPassword());
 
         User user = new User();
-        user.setFirstname(req.getFirstname());
-        user.setLastname(req.getLastname());
         user.setUsername(req.getUsername());
         user.setEmail(req.getEmail());
         user.setPassword(hashedPassword);
 
-        User createdUser = userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        userRepository.save(user);
+        String jwt = JwtUtil.createJwtSignedHMAC(user.getId(), req.getUsername(), user.getEmail());
+        UserCreateResponse userCreateResponse = new UserCreateResponse(user, jwt);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userCreateResponse);
     }
 
-    @GetMapping("/changeUsername")
+    @PostMapping("/parseJwt")
+    public ResponseEntity<?> createJwt(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        // Предполагается, что JWT передается в формате "Bearer <token>"
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7); // Извлекаем токен, убирая "Bearer "
+
+            // Парсинг JWT
+            Jws<Claims> response;
+            try {
+                response = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization header must start with 'Bearer '");
+        }
+    }
+
+    @PostMapping("/changeUsername")
     public ResponseEntity<?> changeUsername(@RequestBody @Valid UserChangeUsernameDTO req) {
         // Data validations
         // Find user for id and email

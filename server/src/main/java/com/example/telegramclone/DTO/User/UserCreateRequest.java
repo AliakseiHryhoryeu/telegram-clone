@@ -1,28 +1,20 @@
 package com.example.telegramclone.DTO.User;
 
-public class UserCreateDTO {
-	private String firstname;
-	private String lastname;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+public class UserCreateRequest {
+
+	@NotBlank
+	@Size(min = 3, max = 35, message = "Username must be between 3 and 35 characters long")
 	private String username;
+
+	@NotBlank
 	private String email;
+
+	@NotBlank
+	@Size(min = 8, max = 40, message = "Password must be between 8 and 40 characters long")
 	private String password;
-
-	// Геттеры и сеттеры
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
 
 	public String getUsername() {
 		return username;

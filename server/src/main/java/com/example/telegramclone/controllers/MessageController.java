@@ -35,10 +35,10 @@ public class MessageController {
 
     // 1. Создание сообщения
     @PostMapping("/createMessage")
-    public ResponseEntity<?> createMessage(@RequestBody @Valid MessageCreateDTO messageCreateDTO) {
+    public ResponseEntity<?> createMessage(@RequestBody @Valid MessageCreateDTO req) {
         // Проверка наличия пользователей через экземпляры userRepository
-        Optional<User> fromUserOpt = userRepository.findById(messageCreateDTO.getFromUserId());
-        Optional<User> toUserOpt = userRepository.findById(messageCreateDTO.getToUserId());
+        Optional<User> fromUserOpt = userRepository.findById(req.getFromUserId());
+        Optional<User> toUserOpt = userRepository.findById(req.getToUserId());
 
         if (fromUserOpt.isEmpty() || toUserOpt.isEmpty()) {
             return ResponseEntity.status(404).body("User not found");
@@ -49,9 +49,9 @@ public class MessageController {
 
         // Создаем новый объект сообщения
         Message message = new Message();
-        message.setMessageContent(messageCreateDTO.getMessage()); // Установка сообщения
-        message.setFromUserId(messageCreateDTO.getFromUserId());
-        message.setToUserId(messageCreateDTO.getToUserId());
+        message.setMessageContent(req.getMessage()); // Установка сообщения
+        message.setFromUserId(req.getFromUserId());
+        message.setToUserId(req.getToUserId());
         message.setDate(new Date().toString()); // Установка текущей даты
         message.setMessageType("text"); // Установить тип сообщения, если есть другие типы
         message.setMessageStatus("sent"); // Статус сообщения "sent"

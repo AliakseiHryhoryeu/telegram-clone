@@ -16,7 +16,6 @@ public class User {
     private String email;
     private String password;
     private String profileImageUrl;
-    private boolean isOnline;
     private String lastSeen;
     private List<Contact> contacts;
     private List<String> messages;
@@ -84,14 +83,6 @@ public class User {
 
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
-    }
-
-    public boolean isOnline() {
-        return isOnline;
-    }
-
-    public void setOnline(boolean online) {
-        isOnline = online;
     }
 
     public String getLastSeen() {
