@@ -9,9 +9,8 @@ public class Message {
     private String id;
     private String fromUserId;
     private String toUserId;
-    private String messageContent; // поле для хранения сообщения
+    private String message; // поле для хранения сообщения
     private String date; // дата отправки
-    private String messageType; // тип сообщения
     private String messageStatus; // статус сообщения
 
     // Геттеры и сеттеры
@@ -40,12 +39,12 @@ public class Message {
         this.toUserId = toUserId;
     }
 
-    public String getMessageContent() {
-        return messageContent;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMessageContent(String messageContent) {
-        this.messageContent = messageContent; // установка содержимого сообщения
+    public void setMessage(String message) {
+        this.message = message; // установка содержимого сообщения
     }
 
     public String getDate() {
@@ -54,14 +53,6 @@ public class Message {
 
     public void setDate(String date) {
         this.date = date; // установка даты
-    }
-
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType; // установка типа сообщения
     }
 
     public String getMessageStatus() {

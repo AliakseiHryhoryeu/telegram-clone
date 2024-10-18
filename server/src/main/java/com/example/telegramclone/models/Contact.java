@@ -1,22 +1,17 @@
 package com.example.telegramclone.models;
 
-import org.springframework.data.annotation.Id;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "contacts")
 public class Contact {
-	@Id
-	private String contactId; // Убедитесь, что это поле есть
-	private String userId; // ID пользователя, к которому принадлежит контакт
-	private String name; // Имя контакта (если нужно)
+	private String userId;
+	private List<String> messages; // Array of message IDs
 
-	// Геттеры и сеттеры
-	public String getContactId() {
-		return contactId;
-	}
-
-	public void setContactId(String contactId) {
-		this.contactId = contactId;
+	public Contact() {
+		this.messages = new ArrayList<>(); // Initialize the messages list
 	}
 
 	public String getUserId() {
@@ -27,11 +22,11 @@ public class Contact {
 		this.userId = userId;
 	}
 
-	public String getName() {
-		return name;
+	public void addMessageId(String messageId) {
+		this.messages.add(messageId); // Add the message ID to the list
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public List<String> getMessagesId() {
+		return messages; // Return the list of message IDs
 	}
 }

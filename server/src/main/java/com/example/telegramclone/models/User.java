@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "users")
@@ -100,8 +101,28 @@ public class User {
         return contacts;
     }
 
-    public void setContacts(List<Contact> contacts) {
-        this.contacts = contacts;
+    public void updateContact(String userId, String messageId) {
+        // Инициализируем список контактов, если он равен null
+        if (this.contacts == null) {
+            this.contacts = new ArrayList<>();
+        }
+
+        // Ищем контакт по userId в списке контактов пользователя
+        Contact existingContact = this.contacts.stream()
+                .filter(c -> c.getUserId().equals(userId))
+                .findFirst()
+                .orElse(null);
+
+        if (existingContact != null) {
+            // Если контакт найден, добавляем идентификатор нового сообщения
+            existingContact.addMessageId(messageId);
+        } else {
+            // Если контакт не найден, создаем новый контакт и добавляем в список
+            Contact newContact = new Contact();
+            newContact.setUserId(userId);
+            newContact.addMessageId(messageId);
+            this.contacts.add(newContact);
+        }
     }
 
     public List<String> getMessages() {

@@ -17,7 +17,8 @@ import java.util.UUID;
 // https://github.com/viralpatel/java-create-validate-jwt-token/blob/master/src/main/java/net/viralpatel/jwt/JWTGenerateValidateHMAC.java
 
 public class JwtUtil {
-	// will change later
+
+	// TO .ENV FILE!!!!!
 	static String secret = "asdfSFS34wfsdfsdfSDSD32dfsddDDerQSNCK34SOWEK5354fdgdf4";
 
 	public static void main(String[] args) {

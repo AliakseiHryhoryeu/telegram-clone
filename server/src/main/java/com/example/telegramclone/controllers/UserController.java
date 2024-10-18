@@ -1,7 +1,6 @@
 package com.example.telegramclone.controllers;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import com.example.telegramclone.DTO.User.UserCreateRequest;
 import com.example.telegramclone.models.JwtPayload;
@@ -15,10 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-
-import javax.xml.crypto.Data;
 
 import org.springframework.http.HttpHeaders;
 
@@ -34,7 +30,6 @@ import com.example.telegramclone.DTO.User.UserChangeLastnameDTO;
 import com.example.telegramclone.DTO.User.UserChangePasswordDTO;
 import com.example.telegramclone.DTO.User.UserChangeUsernameDTO;
 import com.example.telegramclone.DTO.User.UserCreateResponse;
-import com.example.telegramclone.DTO.User.UserParseJwtResponse;
 import static com.example.telegramclone.utils.PasswordUtil.checkPassword;
 import static com.example.telegramclone.utils.PasswordUtil.hashPassword;
 
@@ -105,6 +100,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userCreateResponse);
     }
 
+    // DELETE IT LATER
     @PostMapping("/parseJwt")
     public ResponseEntity<?> createJwt(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         // Предполагается, что JWT передается в формате "Bearer <token>"
