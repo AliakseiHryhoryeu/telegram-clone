@@ -9,7 +9,10 @@ public class PasswordUtil {
         return passwordEncoder.encode(password);
     }
 
+    // rawPassword = new password
+    // hashedPassword = old password from database
     public static boolean checkPassword(String rawPassword, String hashedPassword) {
         return passwordEncoder.matches(rawPassword, hashedPassword);
     }
+
 }

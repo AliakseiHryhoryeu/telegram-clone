@@ -1,5 +1,7 @@
 package com.example.telegramclone.models;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,8 +18,9 @@ public class User {
     private String email;
     private String password;
     private String profileImageUrl;
-    private String lastSeen;
+    private LocalDateTime lastSeen;
     private List<Contact> contacts;
+    private List<String> blocked;
     private List<String> messages;
 
     // Геттеры и сеттеры
@@ -85,11 +88,11 @@ public class User {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public String getLastSeen() {
+    public LocalDateTime getLastSeen() {
         return lastSeen;
     }
 
-    public void setLastSeen(String lastSeen) {
+    public void setLastSeen(LocalDateTime lastSeen) {
         this.lastSeen = lastSeen;
     }
 
@@ -107,5 +110,17 @@ public class User {
 
     public void setMessages(List<String> messages) {
         this.messages = messages;
+    }
+
+    public void addBlocked(String id) {
+        this.blocked.add(id);
+    }
+
+    public void removeBlocked(String id) {
+        this.blocked.remove(id);
+    }
+
+    public List<String> getBlocked() {
+        return blocked;
     }
 }

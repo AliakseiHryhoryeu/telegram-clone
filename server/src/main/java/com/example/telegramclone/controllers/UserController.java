@@ -1,6 +1,10 @@
 package com.example.telegramclone.controllers;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import com.example.telegramclone.DTO.User.UserCreateRequest;
+import com.example.telegramclone.models.JwtPayload;
 import com.example.telegramclone.models.User;
 import com.example.telegramclone.repositories.UserRepository;
 import com.example.telegramclone.utils.PasswordUtil;
@@ -14,17 +18,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.xml.crypto.Data;
+
 import org.springframework.http.HttpHeaders;
+
+import com.example.telegramclone.DTO.User.UserBlockUserDTO;
 
 import jakarta.validation.Valid;
 
 import com.example.telegramclone.utils.JwtUtil;
 
 import com.example.telegramclone.DTO.User.UserChangeDescriptionDTO;
+import com.example.telegramclone.DTO.User.UserChangeFirstnameDTO;
+import com.example.telegramclone.DTO.User.UserChangeLastnameDTO;
 import com.example.telegramclone.DTO.User.UserChangePasswordDTO;
 import com.example.telegramclone.DTO.User.UserChangeUsernameDTO;
 import com.example.telegramclone.DTO.User.UserCreateResponse;
 import com.example.telegramclone.DTO.User.UserParseJwtResponse;
+import static com.example.telegramclone.utils.PasswordUtil.checkPassword;
+import static com.example.telegramclone.utils.PasswordUtil.hashPassword;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -115,19 +127,49 @@ public class UserController {
     }
 
     @PostMapping("/changeUsername")
-    public ResponseEntity<?> changeUsername(@RequestBody @Valid UserChangeUsernameDTO req) {
+    public ResponseEntity<?> changeUsername(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid UserChangeUsernameDTO req) {
+
+        Jws<Claims> jwtParsed; // Извлекаем токен, убирая "Bearer "
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+
+            try {
+                jwtParsed = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization (jwt) header must start with 'Bearer '");
+        }
+
+        // Extract the claims from the JWT
+        Claims claims = jwtParsed.getPayload();
+        JwtPayload jwtPayload = new JwtPayload(
+                claims.get("id", String.class),
+                claims.get("username", String.class),
+                claims.get("email", String.class),
+                claims.getId(),
+                claims.getIssuedAt() != null ? claims.getIssuedAt().getTime() : 0,
+                claims.getExpiration() != null ? claims.getExpiration().getTime() : 0);
+
         // Data validations
         // Find user for id and email
-        Optional<User> userOpt = userRepository.findById(req.getId());
-
+        Optional<User> userOpt = userRepository.findById(jwtPayload.getId());
         if (userOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("User not found");
         }
         User user = userOpt.get();
 
-        // Validation email from req.email and req.id
-        if (!user.getEmail().equals(req.getEmail())) {
-            return ResponseEntity.badRequest().body("Invalid email");
+        // new Username validation
+        if (req.getNewusername() == null || req.getNewusername().isEmpty()) {
+            return ResponseEntity.badRequest().body("Username must not be null or empty");
+        }
+        if (req.getNewusername().length() < 3 || req.getNewusername().length() > 35) {
+            return ResponseEntity.badRequest().body("Username must be between 3 and 35 characters long");
         }
 
         // New username is uniq?
@@ -143,54 +185,104 @@ public class UserController {
         return ResponseEntity.ok("Username updated successfully");
     }
 
-    @GetMapping("/changePassword")
-    public ResponseEntity<?> changeUsername(@RequestBody @Valid UserChangePasswordDTO req) {
+    @PostMapping("/changePassword")
+    public ResponseEntity<?> changePassword(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid UserChangePasswordDTO req) {
+
+        Jws<Claims> jwtParsed; // Извлекаем токен, убирая "Bearer "
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+
+            try {
+                jwtParsed = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization (jwt) header must start with 'Bearer '");
+        }
+
+        // Extract the claims from the JWT
+        Claims claims = jwtParsed.getPayload();
+        JwtPayload jwtPayload = new JwtPayload(
+                claims.get("id", String.class),
+                claims.get("username", String.class),
+                claims.get("email", String.class),
+                claims.getId(),
+                claims.getIssuedAt() != null ? claims.getIssuedAt().getTime() : 0,
+                claims.getExpiration() != null ? claims.getExpiration().getTime() : 0);
+
         // Data validations
         // Find user for id and email
-        Optional<User> userOpt = userRepository.findById(req.getId());
-
+        Optional<User> userOpt = userRepository.findById(jwtPayload.getId());
         if (userOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("User not found");
         }
         User user = userOpt.get();
 
-        // Validation email from req.email and req.id
-        if (!user.getEmail().equals(req.getEmail())) {
-            return ResponseEntity.badRequest().body("Invalid email");
+        // Password validation
+        if (req.getNewPassword() == null || req.getNewPassword().isEmpty()) {
+            return ResponseEntity.badRequest().body("Password must not be null or empty");
+        }
+        if (req.getNewPassword().length() < 8) {
+            return ResponseEntity.badRequest().body("Password must be at least 8 characters long");
+        }
+        if (req.getNewPassword().length() > 40) {
+            return ResponseEntity.badRequest().body("Password max lenght 40 characters long");
         }
 
-        // Vefefication OLD password старого пароля
-        if (!PasswordUtil.checkPassword(req.getOldPassword(), user.getPassword())) {
-            return ResponseEntity.badRequest().body("Old password is incorrect");
+        // Old Password verification
+        if (!checkPassword(req.getOldPassword(), user.getPassword())) {
+            return ResponseEntity.badRequest().body("Wrong old password");
         }
-
-        // Validation new Passwrod
-        if (req.getNewPassword().length() < 8 || req.getNewPassword().length() > 30) {
-            return ResponseEntity.badRequest().body("New password must be between 8 and 30 characters");
-        }
-
+        String newHashedPassword = hashPassword(req.getNewPassword());
         // Refresh username and save
-        user.setPassword(req.getNewPassword());
+        user.setPassword(newHashedPassword);
         userRepository.save(user);
 
-        return ResponseEntity.ok("Username updated successfully");
+        return ResponseEntity.ok("Password updated successfully");
     }
 
-    @GetMapping("/changeDescription")
-    public ResponseEntity<?> changeUsername(@RequestBody @Valid UserChangeDescriptionDTO req) {
-        // Data validations
-        // Find user for id and email
-        Optional<User> userOpt = userRepository.findById(req.getId());
+    @PostMapping("/changeDescription")
+    public ResponseEntity<?> changePassword(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid UserChangeDescriptionDTO req) {
 
+        Jws<Claims> jwtParsed; // Извлекаем токен, убирая "Bearer "
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+
+            try {
+                jwtParsed = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization (jwt) header must start with 'Bearer '");
+        }
+
+        // Extract the claims from the JWT
+        Claims claims = jwtParsed.getPayload();
+        JwtPayload jwtPayload = new JwtPayload(
+                claims.get("id", String.class),
+                claims.get("username", String.class),
+                claims.get("email", String.class),
+                claims.getId(),
+                claims.getIssuedAt() != null ? claims.getIssuedAt().getTime() : 0,
+                claims.getExpiration() != null ? claims.getExpiration().getTime() : 0);
+
+        // Data validations
+        // Find user for id
+        Optional<User> userOpt = userRepository.findById(jwtPayload.getId());
         if (userOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("User not found");
         }
         User user = userOpt.get();
-
-        // Validation email from req.email and req.id
-        if (!user.getEmail().equals(req.getEmail())) {
-            return ResponseEntity.badRequest().body("Invalid email");
-        }
 
         // Validation new Description
         if (req.getNewDescription().length() > 2000) {
@@ -198,16 +290,211 @@ public class UserController {
         }
 
         // Refresh description and save
-        user.setUsername(req.getNewDescription());
+        user.setDescription(req.getNewDescription());
         userRepository.save(user);
 
         return ResponseEntity.ok("Description updated successfully");
     }
 
+    @PostMapping("/changeFirstname")
+    public ResponseEntity<?> changeFirstname(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid UserChangeFirstnameDTO req) {
+
+        Jws<Claims> jwtParsed; // Извлекаем токен, убирая "Bearer "
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+
+            try {
+                jwtParsed = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization (jwt) header must start with 'Bearer '");
+        }
+
+        // Extract the claims from the JWT
+        Claims claims = jwtParsed.getPayload();
+        JwtPayload jwtPayload = new JwtPayload(
+                claims.get("id", String.class),
+                claims.get("username", String.class),
+                claims.get("email", String.class),
+                claims.getId(),
+                claims.getIssuedAt() != null ? claims.getIssuedAt().getTime() : 0,
+                claims.getExpiration() != null ? claims.getExpiration().getTime() : 0);
+
+        // Data validations
+        // Find user for id
+        Optional<User> userOpt = userRepository.findById(jwtPayload.getId());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        User user = userOpt.get();
+
+        // Validation new Firstname
+        if (req.getFirstname().length() > 30) {
+            return ResponseEntity.badRequest().body("Maximum firstname size = 30 letters");
+        }
+
+        // Refresh description and save
+        user.setFirstname(req.getFirstname());
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Firstname updated successfully");
+    }
+
+    @PostMapping("/changeLastname")
+    public ResponseEntity<?> changeLastname(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid UserChangeLastnameDTO req) {
+
+        Jws<Claims> jwtParsed; // Извлекаем токен, убирая "Bearer "
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+
+            try {
+                jwtParsed = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization (jwt) header must start with 'Bearer '");
+        }
+
+        // Extract the claims from the JWT
+        Claims claims = jwtParsed.getPayload();
+        JwtPayload jwtPayload = new JwtPayload(
+                claims.get("id", String.class),
+                claims.get("username", String.class),
+                claims.get("email", String.class),
+                claims.getId(),
+                claims.getIssuedAt() != null ? claims.getIssuedAt().getTime() : 0,
+                claims.getExpiration() != null ? claims.getExpiration().getTime() : 0);
+
+        // Data validations
+        // Find user for id
+        Optional<User> userOpt = userRepository.findById(jwtPayload.getId());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        User user = userOpt.get();
+
+        // Validation new Firstname
+        if (req.getLastname().length() > 30) {
+            return ResponseEntity.badRequest().body("Maximum Lastname size = 30 letters");
+        }
+
+        // Refresh description and save
+        user.setLastname(req.getLastname());
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Lastname updated successfully");
+    }
+
+    @PostMapping("/changeLastSeen")
+    public ResponseEntity<?> changeLastSeen(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+
+        Jws<Claims> jwtParsed; // Извлекаем токен, убирая "Bearer "
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+
+            try {
+                jwtParsed = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization (jwt) header must start with 'Bearer '");
+        }
+
+        // Extract the claims from the JWT
+        Claims claims = jwtParsed.getPayload();
+        JwtPayload jwtPayload = new JwtPayload(
+                claims.get("id", String.class),
+                claims.get("username", String.class),
+                claims.get("email", String.class),
+                claims.getId(),
+                claims.getIssuedAt() != null ? claims.getIssuedAt().getTime() : 0,
+                claims.getExpiration() != null ? claims.getExpiration().getTime() : 0);
+
+        // Data validations
+        // Find user for id
+        Optional<User> userOpt = userRepository.findById(jwtPayload.getId());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        User user = userOpt.get();
+
+        // Refresh description and save
+        user.setLastSeen(LocalDateTime.now());
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Lastname updated successfully");
+    }
+
+    @PostMapping("/BlockUser")
+    public ResponseEntity<?> changeLastname(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid UserBlockUserDTO req) {
+
+        Jws<Claims> jwtParsed; // Извлекаем токен, убирая "Bearer "
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+
+            try {
+                jwtParsed = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization (jwt) header must start with 'Bearer '");
+        }
+
+        // Extract the claims from the JWT
+        Claims claims = jwtParsed.getPayload();
+        JwtPayload jwtPayload = new JwtPayload(
+                claims.get("id", String.class),
+                claims.get("username", String.class),
+                claims.get("email", String.class),
+                claims.getId(),
+                claims.getIssuedAt() != null ? claims.getIssuedAt().getTime() : 0,
+                claims.getExpiration() != null ? claims.getExpiration().getTime() : 0);
+
+        // Data validations
+        // Find user for id
+        Optional<User> userOpt = userRepository.findById(jwtPayload.getId());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        User user = userOpt.get();
+
+        // Validation blocked user is real?
+        if (userRepository.findById(req.getId()).isEmpty()) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        // Refresh description and save
+
+        user.addBlocked(req.getId());
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Blocked list updated successfully");
+    }
+
     @GetMapping("/searchUsers")
     public ResponseEntity<List<User>> searchUsers(@RequestParam String searchTerm) {
         // Поиск пользователей по имени или имени пользователя
-        List<User> users = userRepository.searchByNameOrUsername(searchTerm);
+        List<User> users = userRepository.searchByUsername(searchTerm);
 
         // Проверяем, найдены ли пользователи
         if (users.isEmpty()) {
