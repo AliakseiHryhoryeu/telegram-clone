@@ -1,10 +1,13 @@
 package com.example.telegramclone.DTO.Message;
 
-public class GetMessagesByContactIdDTO {
+public class DeleteAllMessagesByContactIdDTO {
 	private String contactId;
 
-	public GetMessagesByContactIdDTO() {
+	public DeleteAllMessagesByContactIdDTO() {
+	}
 
+	public DeleteAllMessagesByContactIdDTO(String contactid) {
+		this.contactId = contactid;
 	}
 
 	public String getContactId() {
@@ -14,5 +17,4 @@ public class GetMessagesByContactIdDTO {
 	public void setContactId(String contactId) {
 		this.contactId = contactId;
 	}
-
 }

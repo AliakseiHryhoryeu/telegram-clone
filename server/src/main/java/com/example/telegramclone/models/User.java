@@ -22,7 +22,6 @@ public class User {
     private LocalDateTime lastSeen;
     private List<Contact> contacts;
     private List<String> blocked;
-    private List<String> messages;
 
     // Геттеры и сеттеры
     public String getId() {
@@ -115,22 +114,14 @@ public class User {
 
         if (existingContact != null) {
             // Если контакт найден, добавляем идентификатор нового сообщения
-            existingContact.addMessageId(messageId);
+            existingContact.addMessageIdInContact(messageId);
         } else {
             // Если контакт не найден, создаем новый контакт и добавляем в список
             Contact newContact = new Contact();
             newContact.setUserId(userId);
-            newContact.addMessageId(messageId);
+            newContact.addMessageIdInContact(messageId);
             this.contacts.add(newContact);
         }
-    }
-
-    public List<String> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<String> messages) {
-        this.messages = messages;
     }
 
     public void addBlocked(String id) {

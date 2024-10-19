@@ -1,7 +1,5 @@
 package com.example.telegramclone.controllers;
 
-import java.io.Console;
-
 import com.example.telegramclone.models.User;
 import com.example.telegramclone.models.Message;
 import com.example.telegramclone.models.Contact;
@@ -16,7 +14,6 @@ import com.example.telegramclone.repositories.MessageRepository;
 
 import com.example.telegramclone.DTO.Message.MessageCreateDTO;
 import com.example.telegramclone.DTO.Message.MessageDeleteDTO;
-import com.example.telegramclone.DTO.Message.MessageGetsByContactIdDTO;
 import com.example.telegramclone.DTO.Message.MessageReadDTO;
 import com.example.telegramclone.DTO.Message.MessageUpdateDTO;
 
@@ -32,10 +29,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.example.telegramclone.DTO.Message.DeleteAllMessagesByContactIdDTO;
+import com.example.telegramclone.DTO.Message.GetMessageDTO;
 import com.example.telegramclone.DTO.Message.GetMessagesByContactIdDTO;
 
 @RestController
@@ -112,10 +110,11 @@ public class MessageController {
         return ResponseEntity.status(201).body("Message created and contacts updated successfully");
     }
 
+    // 2. get messages by contact id
     @PostMapping("/getMessagesByContactId")
     public ResponseEntity<?> getMessagesByContactId(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
-            @RequestBody GetMessagesByContactIdDTO contactId) {
+            @RequestBody GetMessagesByContactIdDTO req) {
 
         // Parse the JWT
         Jws<Claims> jwtParsed;
@@ -148,15 +147,9 @@ public class MessageController {
         }
         User user = userOpt.get();
 
-        // Log the contactId and the user's contacts
-        System.out.println("Contact ID from request: " + contactId);
-        System.out.println("User's Contacts: " + user.getContacts());
-
-        user.getContacts().forEach(contact -> System.out.println("User's Contact: " + contact));
-
         // Find the contact by contactId (assuming user has a list of contacts)
         Optional<Contact> contactOpt = user.getContacts().stream()
-                .filter(item -> item.getUserId().equals(contactId.getContactId()))
+                .filter(item -> item.getUserId().equals(req.getContactId()))
                 .findAny();
 
         if (contactOpt.isEmpty()) {
@@ -166,7 +159,7 @@ public class MessageController {
         Contact contact = contactOpt.get();
 
         // Fetch messages based on the IDs in the contact's messages list
-        List<Message> messages = messageRepository.findAllById(contact.getMessagesId());
+        List<Message> messages = messageRepository.findAllById(contact.getMessagesIdFromContact());
 
         // Format the response
         List<Map<String, Object>> responseMessages = new ArrayList<>();
@@ -238,11 +231,28 @@ public class MessageController {
         return ResponseEntity.ok("Message updated successfully");
     }
 
-    // Ручка для удаления сообщения
-    @DeleteMapping("/deleteMessage")
-    public ResponseEntity<?> deleteMessage(@RequestBody @Valid MessageDeleteDTO messageDeleteDTO) {
-        // Поиск сообщения по его id
-        Optional<Message> messageOpt = messageRepository.findById(messageDeleteDTO.getMessageId());
+    // 3. Редактирование сообщения
+    @PostMapping("/DeleteMessage")
+    public ResponseEntity<?> DeleteMessage(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid MessageDeleteDTO req) {
+
+        Jws<Claims> jwtParsed; // Извлекаем токен, убирая "Bearer "
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+
+            try {
+                jwtParsed = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization (jwt) header must start with 'Bearer '");
+        }
+
+        Optional<Message> messageOpt = messageRepository.findById(req.getMessageId());
 
         if (messageOpt.isEmpty()) {
             return ResponseEntity.status(404).body("Message not found");
@@ -250,33 +260,238 @@ public class MessageController {
 
         Message message = messageOpt.get();
 
+        // Extract the claims from the JWT
+        Claims claims = jwtParsed.getPayload();
+        JwtPayload jwtPayload = new JwtPayload(
+                claims.get("id", String.class),
+                claims.get("username", String.class),
+                claims.get("email", String.class),
+                claims.getId(),
+                claims.getIssuedAt() != null ? claims.getIssuedAt().getTime() : 0,
+                claims.getExpiration() != null ? claims.getExpiration().getTime() : 0);
+
         // Проверка, что удаляющий пользователь является автором сообщения
-        if (!message.getFromUserId().equals(messageDeleteDTO.getFromUserId())) {
+        if (!message.getFromUserId().equals(jwtPayload.getId())) {
             return ResponseEntity.status(403).body("You are not allowed to delete this message");
         }
 
-        // Удаление сообщения из базы данных
-        messageRepository.delete(message);
-
-        // Обновление списка сообщений у обоих пользователей
+        // find 2 users
         Optional<User> fromUserOpt = userRepository.findById(message.getFromUserId());
         Optional<User> toUserOpt = userRepository.findById(message.getToUserId());
 
+        // delete messageid from users contacts
         if (fromUserOpt.isPresent()) {
             User fromUser = fromUserOpt.get();
-            // Удаляем ID сообщения из списка сообщений отправителя
-            fromUser.getMessages().remove(message.getId());
+            // fromUser.getMessages().remove(message.getId());
             userRepository.save(fromUser);
         }
 
         if (toUserOpt.isPresent()) {
             User toUser = toUserOpt.get();
-            // Удаляем ID сообщения из списка сообщений получателя
-            toUser.getMessages().remove(message.getId());
+            // toUser.getMessages().remove(message.getId());
             userRepository.save(toUser);
         }
 
+        // Delete message from database
+        messageRepository.delete(message);
+
         return ResponseEntity.ok("Message deleted successfully");
+    }
+
+    // Get message
+    @PostMapping("/GetMessage")
+    public ResponseEntity<?> GetMessage(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid GetMessageDTO req) {
+
+        Jws<Claims> jwtParsed; // Извлекаем токен, убирая "Bearer "
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+
+            try {
+                jwtParsed = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization (jwt) header must start with 'Bearer '");
+        }
+
+        // Extract the claims from the JWT
+        Claims claims = jwtParsed.getPayload();
+        JwtPayload jwtPayload = new JwtPayload(
+                claims.get("id", String.class),
+                claims.get("username", String.class),
+                claims.get("email", String.class),
+                claims.getId(),
+                claims.getIssuedAt() != null ? claims.getIssuedAt().getTime() : 0,
+                claims.getExpiration() != null ? claims.getExpiration().getTime() : 0);
+
+        // Get Message
+        Optional<Message> messageOpt = messageRepository.findById(req.getMessageId());
+        if (messageOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("Message not found");
+        }
+
+        Message message = messageOpt.get();
+        // Проверка, что пользователь является автором сообщения
+        if (!message.getFromUserId().equals(jwtPayload.getId()) || !message.getToUserId().equals(jwtPayload.getId())) {
+            return ResponseEntity.status(403).body("You are not allowed to read this message");
+        }
+
+        return ResponseEntity.ok(message);
+    }
+
+    // 7. Пометка сообщения как "прочитанное"
+    // Get message
+    @PostMapping("/readMessage")
+    public ResponseEntity<?> ReadMessage(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid MessageReadDTO req) {
+
+        Jws<Claims> jwtParsed; // Извлекаем токен, убирая "Bearer "
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+
+            try {
+                jwtParsed = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization (jwt) header must start with 'Bearer '");
+        }
+
+        // Extract the claims from the JWT
+        Claims claims = jwtParsed.getPayload();
+        JwtPayload jwtPayload = new JwtPayload(
+                claims.get("id", String.class),
+                claims.get("username", String.class),
+                claims.get("email", String.class),
+                claims.getId(),
+                claims.getIssuedAt() != null ? claims.getIssuedAt().getTime() : 0,
+                claims.getExpiration() != null ? claims.getExpiration().getTime() : 0);
+
+        // Get Message
+        Optional<Message> messageOpt = messageRepository.findById(req.getMessageId());
+        if (messageOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("Message not found");
+        }
+        Message message = messageOpt.get();
+
+        // Проверка, что получатель сообщения соответствует toUserId
+        if (!message.getToUserId().equals(jwtPayload.getId())) {
+            return ResponseEntity.status(403).body("You are not allowed to mark this message as read");
+        }
+
+        // Пометить сообщение как "прочитанное" (обновляем статус сообщения)
+        message.setMessageStatus("read");
+        messageRepository.save(message);
+
+        return ResponseEntity.ok("Message marked as read successfully");
+    }
+
+    @PostMapping("/DeleteAllMessagesByContactId")
+    public ResponseEntity<?> DeleteAllMessagesByContactId(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid DeleteAllMessagesByContactIdDTO req) {
+
+        Jws<Claims> jwtParsed; // Извлекаем токен, убирая "Bearer "
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+
+            try {
+                jwtParsed = JwtUtil.parseJwt(jwt);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JWT: " + e.getMessage());
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authorization (jwt) header must start with 'Bearer '");
+        }
+
+        // Извлекаем данные из токена
+        Claims claims = jwtParsed.getPayload();
+        JwtPayload jwtPayload = new JwtPayload(
+                claims.get("id", String.class),
+                claims.get("username", String.class),
+                claims.get("email", String.class),
+                claims.getId(),
+                claims.getIssuedAt() != null ? claims.getIssuedAt().getTime() : 0,
+                claims.getExpiration() != null ? claims.getExpiration().getTime() : 0);
+
+        // Найдем пользователя по ID из токена
+        Optional<User> userOpt = userRepository.findById(jwtPayload.getId());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        User user = userOpt.get();
+
+        // Find the contact IN USER by contactId (assuming user has a list of contacts)
+        Optional<Contact> userContactOpt = user.getContacts().stream()
+                .filter(item -> item.getUserId().equals(req.getContactId()))
+                .findAny();
+
+        if (userContactOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contact not found11");
+        }
+        Contact userContact = userContactOpt.get();
+
+        // Найдем 2 пользователя по ID из токена
+        Optional<User> contactOpt = userRepository.findById(userContact.getUserId());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        User contact = contactOpt.get();
+
+        // Find the contact IN USER by contactId (assuming user has a list of contacts)
+        Optional<Contact> contactUserOpt = contact.getContacts().stream()
+                .filter(item -> item.getUserId().equals(user.getId()))
+                .findAny();
+
+        if (userContactOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contact not found11");
+        }
+        Contact contactUser = contactUserOpt.get();
+
+        // Получаем список идентификаторов сообщений
+        List<String> userdMessagesIds = userContact.getMessagesIdFromContact();
+
+        // Очищаем сообщения в контактах
+        userContact.getMessagesIdFromContact().clear();
+        contactUser.getMessagesIdFromContact().clear();
+
+        // // Удаляем сообщения из базы данных
+        // if (!userdMessagesIds.isEmpty()) {
+        // messageRepository.deleteAllByIdIn(userdMessagesIds);
+        // }
+
+        // Удаление сообщений
+        if (!userdMessagesIds.isEmpty()) {
+            // Выводим ID сообщений, которые должны быть удалены
+            System.out.println("Message IDs to delete: " + userdMessagesIds);
+
+            // Находим сообщения перед удалением
+            List<Message> messagesToDelete = messageRepository.findAllById(userdMessagesIds);
+            System.out.println("Messages found for deletion: " + messagesToDelete);
+
+            // Удаляем сообщения
+            messageRepository.deleteAllByIdIn(userdMessagesIds);
+            System.out.println("Messages deleted successfully");
+        } else {
+            System.out.println("No message IDs found to delete");
+        }
+
+        // Сохраняем изменения пользователя
+        userRepository.save(user);
+        userRepository.save(contact);
+
+        return ResponseEntity.ok("All messages between users have been deleted.");
     }
 
     // // 4. Получение сообщений по ID контакта (собеседника)
@@ -323,35 +538,6 @@ public class MessageController {
     // .limit(size)
     // .toList();
     // return ResponseEntity.ok(messages);
-    // }
-
-    // 7. Пометка сообщения как "прочитанное"
-    @PostMapping("/readMessage")
-    public ResponseEntity<?> readMessage(@RequestBody @Valid MessageReadDTO messageReadDTO) {
-        // Поиск сообщения по его ID
-        Optional<Message> messageOpt = messageRepository.findById(messageReadDTO.getMessageId());
-
-        if (messageOpt.isEmpty()) {
-            return ResponseEntity.status(404).body("Message not found");
-        }
-
-        Message message = messageOpt.get();
-
-        // Проверка, что получатель сообщения соответствует toUserId
-        if (!message.getToUserId().equals(messageReadDTO.getToUserId())) {
-            return ResponseEntity.status(403).body("You are not allowed to mark this message as read");
-        }
-
-        // Пометить сообщение как "прочитанное" (обновляем статус сообщения)
-        message.setMessageStatus("read"); // Предположим, что вы используете поле messageStatus
-        messageRepository.save(message);
-
-        return ResponseEntity.ok("Message marked as read successfully");
-    }
-
-    // @PostMapping("/create")
-    // public Message createMessage(@RequestBody Message message) {
-    // return messageRepository.save(message);
     // }
 
     // @GetMapping("/between/{fromUserId}/{toUserId}")

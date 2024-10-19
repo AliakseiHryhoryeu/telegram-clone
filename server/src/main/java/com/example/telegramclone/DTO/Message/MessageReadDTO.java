@@ -7,17 +7,13 @@ public class MessageReadDTO {
 	@NotBlank(message = "messageId is required")
 	private String messageId;
 
-	@NotBlank(message = "toUserId is required")
-	private String toUserId;
-
 	// Конструктор без аргументов
 	public MessageReadDTO() {
 	}
 
 	// Конструктор со всеми аргументами
-	public MessageReadDTO(String messageId, String toUserId) {
+	public MessageReadDTO(String messageId) {
 		this.messageId = messageId;
-		this.toUserId = toUserId;
 	}
 
 	// Геттеры и сеттеры
@@ -29,11 +25,4 @@ public class MessageReadDTO {
 		this.messageId = messageId;
 	}
 
-	public String getToUserId() {
-		return toUserId;
-	}
-
-	public void setToUserId(String toUserId) {
-		this.toUserId = toUserId;
-	}
 }

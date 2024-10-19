@@ -22,11 +22,11 @@ public class Contact {
 		this.userId = userId;
 	}
 
-	public void addMessageId(String messageId) {
+	public void addMessageIdInContact(String messageId) {
 		this.messages.add(messageId); // Add the message ID to the list
 	}
 
-	public List<String> getMessagesId() {
+	public List<String> getMessagesIdFromContact() {
 		return messages; // Return the list of message IDs
 	}
 }

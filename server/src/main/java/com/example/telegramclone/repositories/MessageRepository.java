@@ -12,5 +12,7 @@ public interface MessageRepository extends MongoRepository<Message, String> {
 
     List<Message> findByFromUserId(String fromUserId);
 
+    void deleteAllByIdIn(List<String> messagesId);
+
     List<Message> findMessagesByFromUserIdAndToUserId(String fromUserId, String toUserId);
 }
