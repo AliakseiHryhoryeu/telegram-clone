@@ -37,7 +37,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
     @Autowired
     private UserRepository userRepository;

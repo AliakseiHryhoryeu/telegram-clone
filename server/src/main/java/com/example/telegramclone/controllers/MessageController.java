@@ -37,7 +37,7 @@ import com.example.telegramclone.DTO.Message.GetMessageDTO;
 import com.example.telegramclone.DTO.Message.GetMessagesByContactIdDTO;
 
 @RestController
-@RequestMapping("/messages")
+@RequestMapping("/api/messages")
 public class MessageController {
 
     @Autowired
