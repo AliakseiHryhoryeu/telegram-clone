@@ -9,11 +9,9 @@ public class Message {
     private String id;
     private String fromUserId;
     private String toUserId;
-    private String message; // поле для хранения сообщения
-    private String date; // дата отправки
-    private String messageStatus; // статус сообщения
-
-    // Геттеры и сеттеры
+    private String message;
+    private String date;
+    private String messageStatus;
 
     public String getId() {
         return id;
@@ -44,7 +42,7 @@ public class Message {
     }
 
     public void setMessage(String message) {
-        this.message = message; // установка содержимого сообщения
+        this.message = message;
     }
 
     public String getDate() {
@@ -52,7 +50,7 @@ public class Message {
     }
 
     public void setDate(String date) {
-        this.date = date; // установка даты
+        this.date = date;
     }
 
     public String getMessageStatus() {
@@ -60,6 +58,6 @@ public class Message {
     }
 
     public void setMessageStatus(String messageStatus) {
-        this.messageStatus = messageStatus; // установка статуса сообщения
+        this.messageStatus = messageStatus;
     }
 }

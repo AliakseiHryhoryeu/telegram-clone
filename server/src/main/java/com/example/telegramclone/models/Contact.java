@@ -23,7 +23,7 @@ public class Contact {
 	}
 
 	public void addMessageIdInContact(String messageId) {
-		this.messages.add(messageId); // Add the message ID to the list
+		this.messages.add(messageId); // Add the message ID to the list of messages id
 	}
 
 	public List<String> getMessagesIdFromContact() {
