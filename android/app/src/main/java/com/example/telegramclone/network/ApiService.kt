@@ -31,7 +31,7 @@ interface ApiService {
         @Query("login") login: String,
         @Query("username") username: String,
         @Query("email") email: String,
-    @Query("password") password: String
+        @Query("password") password: String
     ): Call<CreateUserResponse>
 //    <user> <jwt>
 
